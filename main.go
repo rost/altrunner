@@ -1,8 +1,7 @@
 package main
 
 import (
-	"log"
-
+	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -11,28 +10,27 @@ const (
 	height = 800
 )
 
+var window *sdl.Window
+var renderer *sdl.Renderer
+var fpsManager = &gfx.FPSmanager{}
+var debugMode = true
+
 func main() {
-	if err := sdl.Init(sdl.INIT_EVERYTHING); err != nil {
-		log.Fatal("SDL: ", err)
-		return
-	}
 
-	window, err := sdl.CreateWindow("alt", sdl.WINDOWPOS_UNDEFINED, sdl.WINDOWPOS_UNDEFINED,
-		width, height, sdl.WINDOW_OPENGL)
-	if err != nil {
-		log.Fatal("window:", err)
-		return
-	}
+	gfx.InitFramerate(fpsManager)
+	gfx.SetFramerate(fpsManager, 60)
+
+	sdl.Init(sdl.INIT_EVERYTHING)
+	defer sdl.Quit()
+
+	window, renderer, _ = sdl.CreateWindowAndRenderer(width, height, sdl.WINDOW_RESIZABLE)
 	defer window.Destroy()
+	
+	renderer.SetLogicalSize(width, height)
 
-	renderer, err := sdl.CreateRenderer(window, -1, sdl.RENDERER_ACCELERATED)
-	if err != nil {
-		log.Fatal("renderer:", err)
-		return
-	}
-	defer renderer.Destroy()
+	running := true
 
-	for {
+	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
 			case *sdl.QuitEvent:
