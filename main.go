@@ -11,33 +11,45 @@ import (
 )
 
 const (
-	screenWidth  = 600
-	screenHeight = 800
+	screenWidth  = 320
+	screenHeight = 200
 )
-
-var window *sdl.Window
-var renderer *sdl.Renderer
-var fpsManager = &gfx.FPSmanager{}
-var debugMode = true
-
-var space resolv.Space
 
 var cell int32 = 4
 
-func main() {
+var space resolv.Space
+var window *sdl.Window
+var renderer *sdl.Renderer
+var avgFramerate int
 
-	gfx.InitFramerate(fpsManager)
-	gfx.SetFramerate(fpsManager, 60)
+var debugMode = true
+
+func main() {
 
 	sdl.Init(sdl.INIT_EVERYTHING)
 	defer sdl.Quit()
 
-	window, renderer, _ = sdl.CreateWindowAndRenderer(screenWidth, screenHeight, sdl.WINDOW_RESIZABLE)
+	window, renderer, _ = sdl.CreateWindowAndRenderer(screenWidth, screenHeight, sdl.WINDOW_SHOWN|sdl.WINDOW_RESIZABLE)
 	defer window.Destroy()
+
+	window.SetResizable(true)
 
 	renderer.SetLogicalSize(screenWidth, screenHeight)
 
+	fpsManager := &gfx.FPSmanager{}
+	gfx.InitFramerate(fpsManager)
+	gfx.SetFramerate(fpsManager, 60)
+
+	// world
+
+	var world WorldInterface = &World{}
+
+	world.Create()
+
 	running := true
+
+	var frameCount int
+	var framerateDelay uint32
 
 	tilemap, err := tiled.LoadFromFile("assets/tilemap.tmx")
 	if err != nil {
@@ -51,18 +63,22 @@ func main() {
 		return
 	}
 
-	var world WorldInterface = &World{}
-
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
 			case *sdl.QuitEvent:
-				return
-
+				running = false
+			case *sdl.KeyboardEvent:
+				keyboard.ReportEvent(event.(*sdl.KeyboardEvent))
 			}
 		}
 
-		world.Create()
+		keyboard.Update()
+
+		if keyboard.KeyPressed(sdl.K_r) {
+			world.Create()
+		}
+
 		world.Update()
 
 		renderer.SetDrawColor(255, 255, 255, 255)
@@ -70,6 +86,17 @@ func main() {
 		drawTileMap(renderer, *tilemap)
 
 		world.Draw()
+
+		framerateDelay += gfx.FramerateDelay(fpsManager)
+
+		if framerateDelay >= 1000 {
+			avgFramerate = frameCount
+			framerateDelay -= 1000
+			frameCount = 0
+			fmt.Println(avgFramerate, " FPS")
+		}
+
+		frameCount++
 
 		renderer.Present()
 	}

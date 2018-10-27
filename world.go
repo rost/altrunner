@@ -26,21 +26,21 @@ func (w *World) Create() {
 	space.Clear()
 
 	w.Player = MakeNewBouncer()
-	w.Player.Rect.X = 32
-	w.Player.Rect.Y = 32
-	w.Player.Rect.W = 16
-	w.Player.Rect.H = 16
+	w.Player.Rect.X = 40
+	w.Player.Rect.Y = 40
+	w.Player.Rect.W = 20
+	w.Player.Rect.H = 20
 	w.Player.SpeedX = 0
 	w.Player.SpeedY = 0
 
 	space.AddShape(w.Player.Rect)
 
-	space.AddShape(resolv.NewRectangle(0, 0, 16, screenHeight))
-	space.AddShape(resolv.NewRectangle(screenWidth-16, 0, 16, screenHeight))
-	space.AddShape(resolv.NewRectangle(0, 0, screenWidth, 16))
-	space.AddShape(resolv.NewRectangle(0, screenHeight-16, screenWidth, 16))
+	space.AddShape(resolv.NewRectangle(0, 0, 20, screenHeight))
+	space.AddShape(resolv.NewRectangle(screenWidth-20, 0, 20, screenHeight))
+	space.AddShape(resolv.NewRectangle(0, 0, screenWidth, 20))
+	space.AddShape(resolv.NewRectangle(0, screenHeight-20, screenWidth, 20))
 
-	c := int32(16)
+	c := int32(20)
 
 	space.AddShape(resolv.NewRectangle(c*4, screenHeight-c*4, c*3, c))
 
@@ -83,17 +83,17 @@ func (w *World) Create() {
 
 func (w *World) Update() {
 
-	w.Player.SpeedY += 0.5
+	w.Player.SpeedY += 0.4
 
 	friction := float32(0.5)
-	// accel := 0.5 + friction
+	accel := 0.4 + friction
 
 	maxSpd := float32(3)
 
 	w.FloatingPlatformY += math.Sin(float64(sdl.GetTicks()/1000)) * .5
 
 	w.FloatingPlatform.Y = int32(w.FloatingPlatformY)
-	w.FloatingPlatform.Y2 = int32(w.FloatingPlatformY) - 16
+	w.FloatingPlatform.Y2 = int32(w.FloatingPlatformY) - 20
 
 	if w.Player.SpeedX > friction {
 		w.Player.SpeedX -= friction
@@ -103,13 +103,13 @@ func (w *World) Update() {
 		w.Player.SpeedX = 0
 	}
 
-	// if keyboard.KeyDown(sdl.K_RIGHT) {
-	// 	w.Player.SpeedX += accel
-	// }
+	if keyboard.KeyDown(sdl.K_RIGHT) {
+		w.Player.SpeedX += accel
+	}
 
-	// if keyboard.KeyDown(sdl.K_LEFT) {
-	// 	w.Player.SpeedX -= accel
-	// }
+	if keyboard.KeyDown(sdl.K_LEFT) {
+		w.Player.SpeedX -= accel
+	}
 
 	if w.Player.SpeedX > maxSpd {
 		w.Player.SpeedX = maxSpd
@@ -122,12 +122,12 @@ func (w *World) Update() {
 	// JUMP
 
 	// Check for a collision downwards by just attempting a resolution downwards and seeing if it collides with something.
-	// down := space.Resolve(w.Player.Rect, 0, 4)
-	// onGround := down.Colliding()
+	down := space.Resolve(w.Player.Rect, 0, 4)
+	onGround := down.Colliding()
 
-	// if keyboard.KeyPressed(sdl.K_x) && onGround {
-	// 	w.Player.SpeedY = -8
-	// }
+	if keyboard.KeyPressed(sdl.K_x) && onGround {
+		w.Player.SpeedY = -8
+	}
 
 	x := int32(w.Player.SpeedX)
 	y := int32(w.Player.SpeedY)
