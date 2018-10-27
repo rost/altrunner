@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	resolv "github.com/SolarLune/resolv/resolv"
 	tiled "github.com/lafriks/go-tiled"
 	"github.com/veandco/go-sdl2/gfx"
 	"github.com/veandco/go-sdl2/img"
@@ -10,14 +11,18 @@ import (
 )
 
 const (
-	width  = 600
-	height = 800
+	screenWidth  = 600
+	screenHeight = 800
 )
 
 var window *sdl.Window
 var renderer *sdl.Renderer
 var fpsManager = &gfx.FPSmanager{}
 var debugMode = true
+
+var space resolv.Space
+
+var cell int32 = 4
 
 func main() {
 
@@ -27,10 +32,10 @@ func main() {
 	sdl.Init(sdl.INIT_EVERYTHING)
 	defer sdl.Quit()
 
-	window, renderer, _ = sdl.CreateWindowAndRenderer(width, height, sdl.WINDOW_RESIZABLE)
+	window, renderer, _ = sdl.CreateWindowAndRenderer(screenWidth, screenHeight, sdl.WINDOW_RESIZABLE)
 	defer window.Destroy()
 
-	renderer.SetLogicalSize(width, height)
+	renderer.SetLogicalSize(screenWidth, screenHeight)
 
 	running := true
 
@@ -46,6 +51,8 @@ func main() {
 		return
 	}
 
+	var world WorldInterface = &World{}
+
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
@@ -55,9 +62,14 @@ func main() {
 			}
 		}
 
+		world.Create()
+		world.Update()
+
 		renderer.SetDrawColor(255, 255, 255, 255)
 		renderer.Clear()
 		drawTileMap(renderer, *tilemap)
+
+		world.Draw()
 
 		renderer.Present()
 	}
