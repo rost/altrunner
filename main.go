@@ -79,6 +79,10 @@ func main() {
 			world.Create()
 		}
 
+		if keyboard.KeyPressed(sdl.K_q) {
+			return
+		}
+
 		world.Update()
 
 		renderer.SetDrawColor(255, 255, 255, 255)
