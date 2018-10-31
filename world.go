@@ -2,14 +2,13 @@ package main
 
 import (
 	"math"
-	"math/rand"
 
 	resolv "github.com/SolarLune/resolv/resolv"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 type World struct {
-	Player            *Bouncer
+	Player            *Player
 	FloatingPlatform  *resolv.Line
 	FloatingPlatformY float64
 }
@@ -25,13 +24,10 @@ func (w *World) Create() {
 
 	space.Clear()
 
-	w.Player = MakeNewBouncer()
-	w.Player.Rect.X = 40
-	w.Player.Rect.Y = 40
-	w.Player.Rect.W = 20
-	w.Player.Rect.H = 20
-	w.Player.SpeedX = 0
-	w.Player.SpeedY = 0
+	// Player := MakePlayer()
+	// w.Player = Player
+
+	w.Player = MakePlayer()
 
 	space.AddShape(w.Player.Rect)
 
@@ -179,6 +175,7 @@ func (w *World) Draw() {
 		if ok {
 
 			if rect == w.Player.Rect {
+				w.Player.Draw()
 				renderer.SetDrawColor(0, 128, 255, 255)
 			} else {
 				renderer.SetDrawColor(255, 255, 255, 255)
@@ -211,41 +208,4 @@ func (w *World) Draw() {
 func (w *World) Destroy() {
 	space.Clear()
 	w.Player = nil
-}
-
-type Bouncer struct {
-	Rect        *resolv.Rectangle
-	SpeedX      float32
-	SpeedY      float32
-	BounceFrame float32
-}
-
-var squares []*Bouncer
-
-func MakeNewBouncer() *Bouncer {
-
-	bouncer := &Bouncer{Rect: resolv.NewRectangle(cell*2+rand.Int31n(screenWidth-cell*4), cell*2+rand.Int31n(screenHeight-cell*4), cell, cell),
-		SpeedX: (0.5 - rand.Float32()) * 8,
-		SpeedY: (0.5 - rand.Float32()) * 8}
-
-	// Attempt to not spawn a Bouncer in an occupied location
-	for i := 0; i < 100; i++ {
-
-		if space.IsColliding(bouncer.Rect) {
-
-			bouncer.Rect.X = cell*2 + rand.Int31n(screenWidth-cell*4)
-			bouncer.Rect.Y = cell*2 + rand.Int31n(screenHeight-cell*4)
-
-		}
-
-	}
-
-	bouncer.Rect.SetTags("bouncer", "solid")
-
-	squares = append(squares, bouncer)
-
-	space.AddShape(bouncer.Rect)
-
-	return bouncer
-
 }
