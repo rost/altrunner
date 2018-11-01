@@ -133,19 +133,3 @@ func drawTileMap(renderer *sdl.Renderer, tilemap tiled.Map) {
 		}
 	}
 }
-
-func textureFromBMP(renderer *sdl.Renderer, filename string) *sdl.Texture {
-	surface, err := img.Load(filename)
-	if err != nil {
-		panic(fmt.Errorf("loading %v: %v", filename, err))
-	}
-	defer surface.Free()
-
-	tex, err := renderer.CreateTextureFromSurface(surface)
-	if err != nil {
-		panic(fmt.Errorf("creating texture from: %v: %v", filename, err))
-	}
-	defer tex.Destroy()
-
-	return tex
-}
