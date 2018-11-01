@@ -34,10 +34,20 @@ func MakePlayer() *Player {
 }
 
 func (p *Player) Draw(renderer *sdl.Renderer) {
-	tile, _ := img.LoadTexture(renderer, "assets/mike.png")
+	texture, _ := img.LoadTexture(renderer, "assets/mike.png")
+
+	tileSrcX := int32(0)
+	tileSrcY := int32(0)
+
+	tileW := int32(20)
+	tileH := int32(20)
+
+	tileDestX := p.Rect.X
+	tileDestY := p.Rect.Y
+
 	srcRect := sdl.Rect{X: tileSrcX * tileW, Y: tileSrcY * tileH, W: tileW, H: tileH}
 	dstRect := sdl.Rect{X: tileDestX, Y: tileDestY, W: tileW, H: tileH}
 
-	renderer.Copy(tile, &srcRect, &dstRect)
+	renderer.Copy(texture, &srcRect, &dstRect)
 
 }

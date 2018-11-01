@@ -175,7 +175,7 @@ func (w *World) Draw() {
 		if ok {
 
 			if rect == w.Player.Rect {
-				w.Player.Draw()
+				w.Player.Draw(renderer)
 				renderer.SetDrawColor(0, 128, 255, 255)
 			} else {
 				renderer.SetDrawColor(255, 255, 255, 255)
