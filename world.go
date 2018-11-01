@@ -31,44 +31,44 @@ func (w *World) Create() {
 
 	space.AddShape(w.Player.Rect)
 
-	space.AddShape(resolv.NewRectangle(0, 0, 20, screenHeight))
-	space.AddShape(resolv.NewRectangle(screenWidth-20, 0, 20, screenHeight))
-	space.AddShape(resolv.NewRectangle(0, 0, screenWidth, 20))
-	space.AddShape(resolv.NewRectangle(0, screenHeight-20, screenWidth, 20))
+	// space.AddShape(resolv.NewRectangle(0, 0, 20, screenHeight)) // L
+	// // space.AddShape(resolv.NewRectangle(screenWidth-20, 0, 20, screenHeight)) // R
+	// // space.AddShape(resolv.NewRectangle(0, 0, screenWidth, 20))               // T
+	// space.AddShape(resolv.NewRectangle(0, screenHeight-20, screenWidth, 20)) // B
 
 	c := int32(20)
 
-	space.AddShape(resolv.NewRectangle(c*4, screenHeight-c*4, c*3, c))
+	// space.AddShape(resolv.NewRectangle(c*4, screenHeight-c*4, c*3, c))
 
 	for _, shape := range space {
 		shape.SetTags("solid")
 	}
 
-	// A ramp
-	line := resolv.NewLine(c*5, screenHeight-c, c*6, screenHeight-c-8)
-	line.SetTags("ramp")
-	space.AddShape(line)
+	// // A ramp
+	// line := resolv.NewLine(c*5, screenHeight-c, c*6, screenHeight-c-8)
+	// line.SetTags("ramp")
+	// space.AddShape(line)
 
-	line = resolv.NewLine(c*6, screenHeight-c-8, c*7, screenHeight-c-8)
-	line.SetTags("ramp")
+	// line = resolv.NewLine(c*6, screenHeight-c-8, c*7, screenHeight-c-8)
+	// line.SetTags("ramp")
 
-	space.AddShape(line)
+	// space.AddShape(line)
 
-	rect := resolv.NewRectangle(c*7, screenHeight-c-8, c*2, 8)
-	rect.SetTags("solid")
-	space.AddShape(rect)
+	// rect := resolv.NewRectangle(c*7, screenHeight-c-8, c*2, 8)
+	// rect.SetTags("solid")
+	// space.AddShape(rect)
 
-	line = resolv.NewLine(c*9, screenHeight-c-8, c*11, screenHeight-c)
-	line.SetTags("ramp")
-	space.AddShape(line)
+	// line = resolv.NewLine(c*9, screenHeight-c-8, c*11, screenHeight-c)
+	// line.SetTags("ramp")
+	// space.AddShape(line)
 
-	line = resolv.NewLine(c*13, screenHeight-c*4, c*17, screenHeight-c*6)
-	line.SetTags("ramp")
-	space.AddShape(line)
+	// line = resolv.NewLine(c*13, screenHeight-c*4, c*17, screenHeight-c*6)
+	// line.SetTags("ramp")
+	// space.AddShape(line)
 
-	line = resolv.NewLine(c*6, screenHeight-c*7, c*7, screenHeight-c*7)
-	line.SetTags("ramp")
-	space.AddShape(line)
+	// line = resolv.NewLine(c*6, screenHeight-c*7, c*7, screenHeight-c*7)
+	// line.SetTags("ramp")
+	// space.AddShape(line)
 
 	w.FloatingPlatform = resolv.NewLine(c*8, screenHeight-c*7, c*9, screenHeight-c*6)
 	w.FloatingPlatform.SetTags("ramp")
@@ -121,7 +121,7 @@ func (w *World) Update() {
 	down := space.Resolve(w.Player.Rect, 0, 4)
 	onGround := down.Colliding()
 
-	if keyboard.KeyPressed(sdl.K_x) && onGround {
+	if keyboard.KeyPressed(sdl.K_SPACE) && onGround {
 		w.Player.SpeedY = -8
 	}
 

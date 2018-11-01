@@ -6,12 +6,12 @@ import (
 	resolv "github.com/SolarLune/resolv/resolv"
 	tiled "github.com/lafriks/go-tiled"
 	"github.com/veandco/go-sdl2/gfx"
-	"github.com/veandco/go-sdl2/img"
+	img "github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
 const (
-	screenWidth  = 320
+	screenWidth  = 1280
 	screenHeight = 200
 )
 
@@ -63,6 +63,9 @@ func main() {
 		return
 	}
 
+	tiles := createShapesFromTilemap(*tilemap)
+	addTileShapes(tiles)
+
 	for running {
 		for event := sdl.PollEvent(); event != nil; event = sdl.PollEvent() {
 			switch event.(type) {
@@ -87,7 +90,8 @@ func main() {
 
 		renderer.SetDrawColor(255, 255, 255, 255)
 		renderer.Clear()
-		drawTileMap(renderer, *tilemap)
+
+		drawTiles(tiles)
 
 		world.Draw()
 
@@ -106,14 +110,21 @@ func main() {
 	}
 }
 
-func drawTileMap(renderer *sdl.Renderer, tilemap tiled.Map) {
+type alttile struct {
+	id      int32
+	srcRect *sdl.Rect
+	dstRect *sdl.Rect
+	shape   *resolv.Rectangle
+}
+
+func createShapesFromTilemap(tilemap tiled.Map) []alttile {
+
+	tiles := make([]alttile, 0)
+
 	tileW := int32(tilemap.TileWidth)
 	tileH := int32(tilemap.TileHeight)
 
 	tilemapImageW := int32(80)
-	// tilemapImageH := int32(60)
-
-	tilemapImage, _ := img.LoadTexture(renderer, "assets/tileset.png")
 
 	for _, layer := range tilemap.Layers {
 
@@ -129,7 +140,40 @@ func drawTileMap(renderer *sdl.Renderer, tilemap tiled.Map) {
 			srcRect := sdl.Rect{X: tileSrcX * tileW, Y: tileSrcY * tileH, W: tileW, H: tileH}
 			dstRect := sdl.Rect{X: tileDestX, Y: tileDestY, W: tileW, H: tileH}
 
-			renderer.Copy(tilemapImage, &srcRect, &dstRect)
+			if id == 0 {
+				shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
+				shape.SetTags("solid")
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect, shape: shape}
+				tiles = append(tiles, t)
+			} else if id == 4 {
+				shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
+				shape.SetTags("solid")
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect, shape: shape}
+				tiles = append(tiles, t)
+			} else {
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect}
+				tiles = append(tiles, t)
+			}
+
+		}
+	}
+
+	return tiles
+}
+
+func drawTiles(tiles []alttile) {
+	tilemapImage, _ := img.LoadTexture(renderer, "assets/tileset.png")
+	defer tilemapImage.Destroy()
+
+	for _, tile := range tiles {
+		renderer.Copy(tilemapImage, tile.srcRect, tile.dstRect)
+	}
+}
+
+func addTileShapes(tiles []alttile) {
+	for _, tile := range tiles {
+		if tile.shape != nil {
+			space.AddShape(tile.shape)
 		}
 	}
 }
