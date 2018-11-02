@@ -34,10 +34,11 @@ func MakePlayer() *Player {
 }
 
 func (p *Player) Draw(renderer *sdl.Renderer) {
-	texture, _ := img.LoadTexture(renderer, "assets/mike.png")
+	texture, _ := img.LoadTexture(renderer, "assets/tileset.png")
+	defer texture.Destroy()
 
-	tileSrcX := int32(0)
-	tileSrcY := int32(0)
+	tileSrcX := int32(2)
+	tileSrcY := int32(2)
 
 	tileW := int32(20)
 	tileH := int32(20)
