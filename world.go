@@ -79,90 +79,15 @@ func (w *World) Create() {
 
 func (w *World) Update() {
 
-	w.Player.SpeedY += 0.4
-
-	friction := float32(0.5)
-	accel := 0.4 + friction
-
-	maxSpd := float32(3)
-
 	w.FloatingPlatformY += math.Sin(float64(sdl.GetTicks()/1000)) * .5
 
 	w.FloatingPlatform.Y = int32(w.FloatingPlatformY)
 	w.FloatingPlatform.Y2 = int32(w.FloatingPlatformY) - 20
 
-	if w.Player.SpeedX > friction {
-		w.Player.SpeedX -= friction
-	} else if w.Player.SpeedX < -friction {
-		w.Player.SpeedX += friction
-	} else {
-		w.Player.SpeedX = 0
-	}
-
-	if keyboard.KeyDown(sdl.K_RIGHT) {
-		w.Player.SpeedX += accel
-	}
-
-	if keyboard.KeyDown(sdl.K_LEFT) {
-		w.Player.SpeedX -= accel
-	}
-
-	if w.Player.SpeedX > maxSpd {
-		w.Player.SpeedX = maxSpd
-	}
-
-	if w.Player.SpeedX < -maxSpd {
-		w.Player.SpeedX = -maxSpd
-	}
-
-	// JUMP
-
-	// Check for a collision downwards by just attempting a resolution downwards and seeing if it collides with something.
-	down := space.Resolve(w.Player.Rect, 0, 4)
-	onGround := down.Colliding()
-
-	if keyboard.KeyPressed(sdl.K_SPACE) && onGround {
-		w.Player.SpeedY = -8
-	}
-
-	x := int32(w.Player.SpeedX)
-	y := int32(w.Player.SpeedY)
-
 	solids := space.FilterByTags("solid")
 	ramps := space.FilterByTags("ramp")
 
-	// X-movement. We only want to collide with solid objects (not ramps) because we want to be able to move up them
-	// and don't need to be inhibited on the x-axis when doing so.
-
-	if res := solids.Resolve(w.Player.Rect, x, 0); res.Colliding() {
-		x = res.ResolveX
-		w.Player.SpeedX = 0
-	}
-
-	w.Player.Rect.X += x
-
-	// Y movement. We check for ramp collision first; if we find it, then we just automatically will
-	// slide up the ramp because the player is moving into it.
-
-	// We look for ramps a little aggressively downwards because when walking down them, we want to stick to them.
-	// If we didn't do this, then you would "bob" when walking down the ramp as the Player moves too quickly out into
-	// space for gravity to push back down onto the ramp.
-	res := ramps.Resolve(w.Player.Rect, 0, y+4)
-
-	if y < 0 || (res.Teleporting && res.ResolveY < -w.Player.Rect.H/2) {
-		res = resolv.Collision{}
-	}
-
-	if !res.Colliding() {
-		res = solids.Resolve(w.Player.Rect, 0, y)
-	}
-
-	if res.Colliding() {
-		y = res.ResolveY
-		w.Player.SpeedY = 0
-	}
-
-	w.Player.Rect.Y += y
+	w.Player.Update(solids, ramps)
 
 }
 
