@@ -45,11 +45,7 @@ func main() {
 	gfx.InitFramerate(fpsManager)
 	gfx.SetFramerate(fpsManager, 60)
 
-	// world
-
-	var world WorldInterface = &World{}
-
-	world.Create()
+	initGame()
 
 	running := true
 
@@ -69,19 +65,33 @@ func main() {
 		keyboard.Update()
 
 		if keyboard.KeyPressed(sdl.K_r) {
-			world.Create()
+			initGame()
 		}
 
 		if keyboard.KeyPressed(sdl.K_q) {
 			return
 		}
 
-		world.Update()
+		for _, elem := range elements {
+			err := elem.update()
+			if err != nil {
+				fmt.Println("updating element:", err)
+				return
+			}
+		}
 
 		renderer.SetDrawColor(255, 255, 255, 255)
 		renderer.Clear()
 
-		world.Draw()
+		// world.Draw()
+
+		for _, elem := range elements {
+			err := elem.draw(renderer)
+			if err != nil {
+				fmt.Println("drawing element:", err)
+				return
+			}
+		}
 
 		framerateDelay += gfx.FramerateDelay(fpsManager)
 
@@ -96,4 +106,12 @@ func main() {
 
 		renderer.Present()
 	}
+}
+
+func initGame() {
+	space.Clear()
+	elements = nil
+	initTiles()
+	initShapes()
+	initPlayer()
 }
