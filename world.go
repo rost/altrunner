@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"math"
 
 	resolv "github.com/SolarLune/resolv/resolv"
+	tiled "github.com/lafriks/go-tiled"
+	"github.com/veandco/go-sdl2/img"
 	"github.com/veandco/go-sdl2/sdl"
 )
 
@@ -20,9 +23,30 @@ type WorldInterface interface {
 	Destroy()
 }
 
+type alttile struct {
+	id      int32
+	srcRect *sdl.Rect
+	dstRect *sdl.Rect
+	shape   *resolv.Rectangle
+}
+
+var tilemap *tiled.Map
+var tiles []alttile
+
 func (w *World) Create() {
 
+	var err error
+
 	space.Clear()
+
+	tilemap, err = tiled.LoadFromFile("assets/tilemap.tmx")
+	if err != nil {
+		fmt.Printf("couldn't read tmx tilemap: %v", err)
+		return
+	}
+
+	tiles = createShapesFromTilemap(*tilemap)
+	addTileShapes(tiles)
 
 	// Player := MakePlayer()
 	// w.Player = Player
@@ -93,6 +117,8 @@ func (w *World) Update() {
 
 func (w *World) Draw() {
 
+	drawTiles(tiles)
+
 	for _, shape := range space {
 
 		rect, ok := shape.(*resolv.Rectangle)
@@ -133,4 +159,65 @@ func (w *World) Draw() {
 func (w *World) Destroy() {
 	space.Clear()
 	w.Player = nil
+}
+
+func createShapesFromTilemap(tilemap tiled.Map) []alttile {
+
+	tiles := make([]alttile, 0)
+
+	tileW := int32(tilemap.TileWidth)
+	tileH := int32(tilemap.TileHeight)
+
+	tilemapImageW := int32(80)
+
+	for _, layer := range tilemap.Layers {
+
+		for tileIndex, tile := range layer.Tiles {
+
+			id := int32(tile.ID)
+			tileDestX := int32(tileIndex%tilemap.Width) * tileW
+			tileDestY := int32((int32(tileIndex) / int32(tilemap.Width)) * tileH)
+
+			var tileSrcX = id % (tilemapImageW / tileW)
+			var tileSrcY = int32(id / (tilemapImageW / tileW))
+
+			srcRect := sdl.Rect{X: tileSrcX * tileW, Y: tileSrcY * tileH, W: tileW, H: tileH}
+			dstRect := sdl.Rect{X: tileDestX, Y: tileDestY, W: tileW, H: tileH}
+
+			if id == 0 {
+				shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
+				shape.SetTags("solid")
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect, shape: shape}
+				tiles = append(tiles, t)
+			} else if id == 4 {
+				shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
+				shape.SetTags("solid")
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect, shape: shape}
+				tiles = append(tiles, t)
+			} else {
+				t := alttile{id: id, srcRect: &srcRect, dstRect: &dstRect}
+				tiles = append(tiles, t)
+			}
+
+		}
+	}
+
+	return tiles
+}
+
+func drawTiles(tiles []alttile) {
+	tilemapImage, _ := img.LoadTexture(renderer, "assets/tileset.png")
+	defer tilemapImage.Destroy()
+
+	for _, tile := range tiles {
+		renderer.Copy(tilemapImage, tile.srcRect, tile.dstRect)
+	}
+}
+
+func addTileShapes(tiles []alttile) {
+	for _, tile := range tiles {
+		if tile.shape != nil {
+			space.AddShape(tile.shape)
+		}
+	}
 }
