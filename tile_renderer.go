@@ -24,12 +24,16 @@ func (tr *tileRenderer) onUpdate() error {
 func (tr *tileRenderer) onDraw(renderer *sdl.Renderer) error {
 	tile := tr.container
 
-	renderer.Copy(tr.tex, tile.srcRect, tile.dstRect)
+	tileDstRectX := tile.dstRect.X - camX
+
+	dstRect := sdl.Rect{X: tileDstRectX, Y: tile.dstRect.Y, W: tile.dstRect.W, H: tile.dstRect.H}
+
+	renderer.Copy(tr.tex, tile.srcRect, &dstRect)
 
 	if debugMode == true {
 		if tile.rect != nil {
 			renderer.SetDrawColor(255, 255, 255, 255)
-			renderer.DrawRect(tile.dstRect)
+			renderer.DrawRect(&dstRect)
 		}
 	}
 

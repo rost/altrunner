@@ -75,6 +75,8 @@ func (mover *keyboardMover) onUpdate() error {
 
 	p.rect.X += x
 
+	camX += x
+
 	// Y movement. We check for ramp collision first; if we find it, then we just automatically will
 	// slide up the ramp because the player is moving into it.
 

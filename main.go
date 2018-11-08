@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	screenWidth  = 1280
+	screenWidth  = 320
 	screenHeight = 200
 )
 
@@ -21,9 +21,14 @@ var window *sdl.Window
 var renderer *sdl.Renderer
 var avgFramerate int
 
+// camera position
+var camX, camY int32
+
 var debugMode = true
 
 func main() {
+
+	camX = 0
 
 	sdl.Init(sdl.INIT_EVERYTHING)
 	defer sdl.Quit()
@@ -110,6 +115,7 @@ func main() {
 
 func initGame() {
 	space.Clear()
+	camX = 0
 	elements = nil
 	initTiles()
 	initShapes()

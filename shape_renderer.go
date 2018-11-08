@@ -44,7 +44,7 @@ func (sr *shapeRenderer) onDraw(renderer *sdl.Renderer) error {
 	for _, shape := range space {
 		line, ok := shape.(*resolv.Line)
 		if ok {
-			renderer.DrawLine(line.X, line.Y, line.X2, line.Y2)
+			renderer.DrawLine(line.X-camX, line.Y, line.X2-camX, line.Y2)
 		}
 	}
 

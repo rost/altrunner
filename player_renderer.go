@@ -33,7 +33,7 @@ func (pr *playerRenderer) onDraw(renderer *sdl.Renderer) error {
 	tileW := int32(20)
 	tileH := int32(20)
 
-	tileDestX := x
+	tileDestX := x - camX
 	tileDestY := y
 
 	srcRect := sdl.Rect{X: tileSrcX * tileW, Y: tileSrcY * tileH, W: tileW, H: tileH}
@@ -45,7 +45,7 @@ func (pr *playerRenderer) onDraw(renderer *sdl.Renderer) error {
 	if debugMode == true {
 		rect := pr.container.rect
 		renderer.SetDrawColor(0, 128, 255, 255)
-		renderer.DrawRect(&sdl.Rect{X: rect.X, Y: rect.Y, W: rect.W, H: rect.H})
+		renderer.DrawRect(&sdl.Rect{X: rect.X - camX, Y: rect.Y, W: rect.W, H: rect.H})
 	}
 
 	return nil
