@@ -52,7 +52,7 @@ func newTile(tileIndex int, layerTile *tiled.LayerTile) *element {
 	srcRect := sdl.Rect{X: tileSrcX * tileW, Y: tileSrcY * tileH, W: tileW, H: tileH}
 	dstRect := sdl.Rect{X: tileDestX, Y: tileDestY, W: tileW, H: tileH}
 
-	if id == 0 {
+	if id == 3 {
 		shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
 		shape.SetTags("solid")
 		t := element{tileID: id, srcRect: &srcRect, dstRect: &dstRect, rect: shape}
