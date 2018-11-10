@@ -75,6 +75,19 @@ func (mover *keyboardMover) onUpdate() error {
 
 	p.rect.X += x
 
+	// center camera on player
+	camX = (p.rect.X + 20/2) - screenWidth/2
+
+	// keep camera in bounds
+	if camX < 0 {
+		camX = 0
+	}
+
+	if camX > (levelWidth - screenWidth/2) {
+		camX = levelWidth - screenWidth/2
+	}
+
+	// set new camera position
 	camX += x
 
 	// Y movement. We check for ramp collision first; if we find it, then we just automatically will

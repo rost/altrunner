@@ -12,6 +12,9 @@ import (
 const (
 	screenWidth  = 320
 	screenHeight = 200
+
+	levelWidth  = 1280
+	levelHeight = 200
 )
 
 var cell int32 = 4
