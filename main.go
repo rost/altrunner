@@ -64,6 +64,7 @@ func main() {
 	gfx.SetFramerate(fpsManager, 60)
 
 	initGame()
+	runTick()
 	state = paused
 
 	running := true
@@ -92,27 +93,7 @@ func main() {
 		}
 
 		if state == play {
-
-			for _, elem := range elements {
-				err := elem.update()
-				if err != nil {
-					fmt.Println("updating element:", err)
-					return
-				}
-			}
-
-			renderer.SetDrawColor(255, 255, 255, 255)
-			renderer.Clear()
-
-			// world.Draw()
-
-			for _, elem := range elements {
-				err := elem.draw(renderer)
-				if err != nil {
-					fmt.Println("drawing element:", err)
-					return
-				}
-			}
+			runTick()
 
 			if keyboard.KeyPressed(sdl.K_p) {
 				state = paused
@@ -150,4 +131,27 @@ func initGame() {
 	initTiles()
 	initShapes()
 	initPlayer()
+}
+
+func runTick() {
+	for _, elem := range elements {
+		err := elem.update()
+		if err != nil {
+			fmt.Println("updating element:", err)
+			return
+		}
+	}
+
+	renderer.SetDrawColor(255, 255, 255, 255)
+	renderer.Clear()
+
+	// world.Draw()
+
+	for _, elem := range elements {
+		err := elem.draw(renderer)
+		if err != nil {
+			fmt.Println("drawing element:", err)
+			return
+		}
+	}
 }
