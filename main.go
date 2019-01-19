@@ -13,9 +13,19 @@ const (
 	screenWidth  = 320
 	screenHeight = 200
 
-	levelWidth  = 1280
+	levelWidth  = 1440
 	levelHeight = 200
 )
+
+type gameState int
+
+const (
+	start gameState = iota
+	play
+	paused
+)
+
+var state = start
 
 var cell int32 = 4
 
@@ -54,6 +64,7 @@ func main() {
 	gfx.SetFramerate(fpsManager, 60)
 
 	initGame()
+	state = paused
 
 	running := true
 
@@ -80,24 +91,40 @@ func main() {
 			return
 		}
 
-		for _, elem := range elements {
-			err := elem.update()
-			if err != nil {
-				fmt.Println("updating element:", err)
-				return
+		if state == play {
+
+			for _, elem := range elements {
+				err := elem.update()
+				if err != nil {
+					fmt.Println("updating element:", err)
+					return
+				}
 			}
-		}
 
-		renderer.SetDrawColor(255, 255, 255, 255)
-		renderer.Clear()
+			renderer.SetDrawColor(255, 255, 255, 255)
+			renderer.Clear()
 
-		// world.Draw()
+			// world.Draw()
 
-		for _, elem := range elements {
-			err := elem.draw(renderer)
-			if err != nil {
-				fmt.Println("drawing element:", err)
-				return
+			for _, elem := range elements {
+				err := elem.draw(renderer)
+				if err != nil {
+					fmt.Println("drawing element:", err)
+					return
+				}
+			}
+
+			if keyboard.KeyPressed(sdl.K_p) {
+				state = paused
+			}
+
+		} else if state == start {
+			if keyboard.KeyPressed(sdl.K_p) {
+				state = play
+			}
+		} else if state == paused {
+			if keyboard.KeyPressed(sdl.K_p) {
+				state = play
 			}
 		}
 
