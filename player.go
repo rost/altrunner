@@ -27,7 +27,7 @@ func newPlayer(renderer *sdl.Renderer) *element {
 	player.speedx = 0
 	player.speedy = 0
 
-	player.rect.SetTags("player", "solid")
+	player.rect.AddTags("player", "solid")
 
 	pr := newPlayerRenderer(player, renderer, "assets/tileset.png")
 	player.addComponent(pr)
@@ -41,5 +41,5 @@ func newPlayer(renderer *sdl.Renderer) *element {
 func initPlayer() {
 	player := newPlayer(renderer)
 	elements = append(elements, player)
-	space.AddShape(player.rect)
+	space.Add(player.rect)
 }

@@ -2,12 +2,16 @@ github.com/SolarLune/resolv v0.0.0-20181021052647-670b76ab72fb h1:DjsE11+350rVqT
 github.com/SolarLune/resolv v0.0.0-20181021052647-670b76ab72fb/go.mod h1:Ov0hOC/Xa1bCjByZrz5muPSE8pNZQZioXYMXxgx+K80=
 github.com/SolarLune/resolv v0.0.0-20190114215736-c324bac5f69d h1:/Z2hFl3ZBA2TQHXwx0ggwTVxy4OtG4jmjKOLzgaOcaY=
 github.com/SolarLune/resolv v0.0.0-20190114215736-c324bac5f69d/go.mod h1:Ov0hOC/Xa1bCjByZrz5muPSE8pNZQZioXYMXxgx+K80=
+github.com/SolarLune/resolv v0.0.0-20190326155406-6053e4e6907a h1:rG5f6BY4RlRjnZYr0TPDiVDaEzv/fo72nu6LD54sFvk=
+github.com/SolarLune/resolv v0.0.0-20190326155406-6053e4e6907a/go.mod h1:Ov0hOC/Xa1bCjByZrz5muPSE8pNZQZioXYMXxgx+K80=
 github.com/lafriks/go-tiled v0.0.0-20170126064058-a51c9a1b70d4 h1:Z9eELJR+LXslmeFWCJ7nyq17IJn/vjZT3Wy1+BgeEgE=
 github.com/lafriks/go-tiled v0.0.0-20170126064058-a51c9a1b70d4/go.mod h1:o7EHtBS9xOPV1Zz1brlpHab4UQ61m9N21BKC/qMBALo=
 github.com/lafriks/go-tiled v0.0.0-20181210174441-03cf8f413994 h1:a2XBtXtp3fFMEguKB7f1MvrsrMu41KMGIUwallDAxvk=
 github.com/lafriks/go-tiled v0.0.0-20181210174441-03cf8f413994/go.mod h1:o7EHtBS9xOPV1Zz1brlpHab4UQ61m9N21BKC/qMBALo=
 github.com/lafriks/go-tiled v0.0.0-20190125071551-1139e5ce1e5c h1:8pspKDLbKXsumFdHr2beQMYJ+30qgfChImkiBRu/zoA=
 github.com/lafriks/go-tiled v0.0.0-20190125071551-1139e5ce1e5c/go.mod h1:o7EHtBS9xOPV1Zz1brlpHab4UQ61m9N21BKC/qMBALo=
+github.com/lafriks/go-tiled v0.0.0-20190406192112-160736f50f0d h1:/cgeO3ILaqbeOqw9cwvRYTa+LDtmQ1Qn4MKwDE1zslI=
+github.com/lafriks/go-tiled v0.0.0-20190406192112-160736f50f0d/go.mod h1:o7EHtBS9xOPV1Zz1brlpHab4UQ61m9N21BKC/qMBALo=
 github.com/veandco/go-sdl2 v0.0.0-20180925095440-75ff82abc4e3 h1:S1dvzp6ZDdmz1M4oRQ6ceLwU6ZDCNvIa20zhJRHyKgE=
 github.com/veandco/go-sdl2 v0.0.0-20180925095440-75ff82abc4e3/go.mod h1:FB+kTpX9YTE+urhYiClnRzpOXbiWgaU3+5F2AB78DPg=
 github.com/veandco/go-sdl2 v0.3.0 h1:IWYkHMp8V3v37NsKjszln8FFnX2+ab0538J371t+rss=

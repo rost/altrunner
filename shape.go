@@ -10,8 +10,8 @@ func initShapes() {
 	c := int32(20)
 
 	platform.FloatingPlatform = resolv.NewLine(c*8, screenHeight-c*7, c*9, screenHeight-c*6)
-	platform.FloatingPlatform.SetTags("ramp")
-	space.AddShape(platform.FloatingPlatform)
+	platform.FloatingPlatform.AddTags("ramp")
+	space.Add(platform.FloatingPlatform)
 	platform.FloatingPlatformY = float64(platform.FloatingPlatform.Y)
 
 	sr := newShapeRenderer(platform, renderer)

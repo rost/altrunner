@@ -23,7 +23,7 @@ func initTiles() {
 		for tileIndex, layerTile := range layer.Tiles {
 			t := newTile(tileIndex, layerTile)
 			if t.rect != nil {
-				space.AddShape(t.rect)
+				space.Add(t.rect)
 			}
 
 			filename := "assets/tileset.png"
@@ -54,12 +54,12 @@ func newTile(tileIndex int, layerTile *tiled.LayerTile) *element {
 
 	if id == 3 {
 		shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
-		shape.SetTags("solid")
+		shape.AddTags("solid")
 		t := element{tileID: id, srcRect: &srcRect, dstRect: &dstRect, rect: shape}
 		return &t
 	} else if id == 4 {
 		shape := resolv.NewRectangle(tileDestX, tileDestY, 20, 20)
-		shape.SetTags("solid")
+		shape.AddTags("solid")
 		t := element{tileID: id, srcRect: &srcRect, dstRect: &dstRect, rect: shape}
 		return &t
 	} else {
