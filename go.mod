@@ -1,4 +1,4 @@
-module github.com/rost/altgame
+module github.com/rost/altrunner
 
 require (
 	github.com/SolarLune/resolv v0.0.0-20190326155406-6053e4e6907a
